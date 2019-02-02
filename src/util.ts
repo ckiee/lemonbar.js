@@ -43,12 +43,15 @@ interface ILemonbarColors {
  * 
  * OK: `00000`, THIS IS BAD: `#00000`
  */
-class LemonbarColor {
+class LemonbarColor implements IToString {
     private color: string;
     constructor(color: string) {
         this.color = color;
     }
     public getColorAsHexStr(): string {
+        return this.color;
+    }
+    public toString(): string {
         return this.color;
     }
 }
@@ -57,10 +60,25 @@ class LemonbarColor {
  */
 interface ILemonbarPart {
     /** This function needs to return the text. ex. the time as a Promise that resolves to a string */
-    execute(): Promise<string>
+    execute(): Promise<string>;
+    readonly modifiers: Array<ILemonbarModifier>;
 }
+
+/** INTERNAL USE ONLY*/
+interface IToString {
+    toString(): string
+}
+
+/**
+ * A ILemonbarModifier holds the modifier data (ex. centered text, colored text, etc.) 
+ * 
+ * It is implemented by the library and does not need to be implemented by the user.
+ */
 interface ILemonbarModifier {
-
+    generate<T extends IToString>(arg: T): string;
+    /** This is not a function as lemonbar does not need the arg to remove a "modifier" */
+    readonly generateRemoval: string;
+    name: string;
 }
 
-export { LemonbarColor, ILemonbarColors, ILemonbarWindowGeometry, ILemonbarDockingOptions, ILemonbarOptions }
+export { LemonbarColor, ILemonbarColors, ILemonbarWindowGeometry, ILemonbarDockingOptions, ILemonbarOptions, ILemonbarPart, ILemonbarModifier, IToString };

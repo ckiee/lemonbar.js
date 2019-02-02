@@ -1,4 +1,4 @@
-import * as opts from "./options";
+import * as opts from "./util";
 import proc from "mz/child_process";
 
 class LemonbarJS {
@@ -33,9 +33,6 @@ class LemonbarJS {
         // return filtered.length == 0 ? "" : ` ${filtered.join(" ")}`;
     }
 }
-
-
-
 
 export default LemonbarJS;
 // export * from "./options";
