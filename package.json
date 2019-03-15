@@ -1,6 +1,6 @@
 {
   "name": "lemonbar.js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A wrapper around Lemonbar for Node.js written in TypeScript",
   "main": "dist/index.js",
   "repository": "git@github.com:RONTheCookie/lemonbar.js.git",
