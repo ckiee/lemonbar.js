@@ -6,6 +6,7 @@ Obtain the `lemonbar.js` package from NPM:
 yarn add lemonbar.js
 ```
 Stick it in your project, below is an example.
+More docs are [here](https://lemonbardocs.ronthecookie.me/)
 ## Example
 ```ts
 import LemonbarJS from "lemonbar.js";
