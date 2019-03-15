@@ -2,48 +2,48 @@
  * Self-exlpantory
  */
 interface ILemonbarOptions {
-    geometry?: ILemonbarWindowGeometry,
-    docking?: ILemonbarDockingOptions,
-    font?: string,
-    clickableAreas?: number,
-    wm_name?: string,
-    underline_width?: number, // This is in pixels
-    colors?: ILemonbarColors,
-    redirect_stdout: boolean
+    geometry?: ILemonbarWindowGeometry;
+    docking?: ILemonbarDockingOptions;
+    font?: string;
+    clickableAreas?: number;
+    wm_name?: string;
+    underline_width?: number; // This is in pixels
+    colors?: ILemonbarColors;
+    redirect_stdout: boolean;
 }
 /**
  * Self-exlpantory
  */
 interface ILemonbarDockingOptions {
-    bottom: boolean,
-    force: boolean
+    bottom: boolean;
+    force: boolean;
 }
 /**
  * This holds the bar size (width and height)
- * 
+ *
  * TODO: Add the other part (I think it's padding)
  */
 interface ILemonbarWindowGeometry {
-    width: number,
-    height: number
+    width: number;
+    height: number;
 }
 /**
  * This holds all of the color options Lemonbar can display.
  */
 interface ILemonbarColors {
-    bg: LemonbarColor,
-    fg: LemonbarColor,
-    underline: LemonbarColor
+    bg: LemonbarColor;
+    fg: LemonbarColor;
+    underline: LemonbarColor;
 }
 /**
  * This is the representation of a color in Lemonbar.js.
  * It should be made with the color string as a hex number without the starting \#
- * 
+ *
  * Example:
- * 
+ *
  * OK: `00000`, THIS IS BAD: `#00000`
  */
-class LemonbarColor implements IToString {
+export class LemonbarColor implements IToString {
     private color: string;
     constructor(color: string) {
         this.color = color;
@@ -55,30 +55,48 @@ class LemonbarColor implements IToString {
         return this.color;
     }
 }
-/**
- *  A ILemonbarPart is a piece of text with ILemonbarModifier's that the user writes. ex. Clock part shows the time in a desired format.
- */
-interface ILemonbarPart {
-    /** This function needs to return the text. ex. the time as a Promise that resolves to a string */
-    execute(): Promise<string>;
-    readonly modifiers: Array<ILemonbarModifier>;
-}
 
 /** INTERNAL USE ONLY*/
 interface IToString {
-    toString(): string
+    toString(): string;
 }
 
-/**
- * A ILemonbarModifier holds the modifier data (ex. centered text, colored text, etc.) 
- * 
- * It is implemented by the library and does not need to be implemented by the user.
- */
-interface ILemonbarModifier {
-    generate<T extends IToString>(arg: T): string;
-    /** This is not a function as lemonbar does not need the arg to remove a "modifier" */
-    readonly generateRemoval: string;
-    name: string;
+export function generateArgArray(opts: ILemonbarOptions): Array<string> {
+    const geometry = opts.geometry
+        ? `-g ${opts.geometry.width}x${opts.geometry.height}`
+        : "";
+    const dockBottom = opts.docking
+        ? opts.docking.bottom
+            ? "-b"
+            : ""
+        : "";
+    const dockForce = opts.docking ? (opts.docking.force ? "-d" : "") : "";
+    const font = opts.font ? `-f ${opts.font}` : "";
+    const clickableAreas = opts.clickableAreas
+        ? `-a ${opts.clickableAreas}`
+        : "";
+    const wm_name = opts.wm_name ? `-n ${opts.wm_name}` : "";
+    const underline_width = opts.underline_width
+        ? `${opts.underline_width}`
+        : "";
+    const bgColor = opts.colors ? `-B ${opts.colors.bg}` : "";
+    const fgColor = opts.colors ? `-F ${opts.colors.fg}` : "";
+    const ulColor = opts.colors ? `-U ${opts.colors.underline}` : "";
+    const arr = [
+        geometry,
+        dockBottom,
+        dockForce,
+        font,
+        clickableAreas,
+        wm_name,
+        underline_width,
+        bgColor,
+        fgColor,
+        ulColor
+    ];
+    const filtered = arr.filter((a) => a.length !== 0);
+    return filtered;
+    // return filtered.length == 0 ? "" : ` ${filtered.join(" ")}`;
 }
 
-export { LemonbarColor, ILemonbarColors, ILemonbarWindowGeometry, ILemonbarDockingOptions, ILemonbarOptions, ILemonbarPart, ILemonbarModifier, IToString };
+export { ILemonbarOptions }

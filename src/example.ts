@@ -1,8 +1,15 @@
 import LemonbarJS from "./index";
 
-// Most minimal example
-const bar = new LemonbarJS({
-    redirect_stdout: true,
-    clickableAreas: 5
-});
-bar.launch();
+async function start() {
+    // NOT Minimalistic example
+    const bar = await LemonbarJS.make({
+        redirect_stdout: true,
+        clickableAreas: 5,
+        docking: {
+            bottom: true,
+            force: false
+        },
+    });
+    bar.write("Hello WORLD this is lemonbar.js");
+}
+start();
